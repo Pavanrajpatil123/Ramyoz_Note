@@ -1,9 +1,9 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { isValidObjectId } from 'mongoose';
-import dbConnect from './lib/mongodb';
-import Note from './models/Note';
+import dbConnect from './lib/mongodb.js';
+import Note from './models/Note.js';
 
 dotenv.config();
 
@@ -24,11 +24,11 @@ app.use(express.json());
   }
 })();
 
-app.get('/health', (_req, res) => {
+app.get('/health', (_req: Request, res: Response) => {
   res.json({ ok: true });
 });
 
-app.get('/notes', async (_req, res) => {
+app.get('/notes', async (_req: Request, res: Response) => {
   try {
     await dbConnect();
     const notes = await Note.find().sort({ createdAt: -1 });
@@ -38,7 +38,7 @@ app.get('/notes', async (_req, res) => {
   }
 });
 
-app.post('/notes', async (req, res) => {
+app.post('/notes', async (req: Request, res: Response) => {
   try {
     await dbConnect();
     const { title, content } = req.body || {};
@@ -52,7 +52,7 @@ app.post('/notes', async (req, res) => {
   }
 });
 
-app.get('/notes/:id', async (req, res) => {
+app.get('/notes/:id', async (req: Request, res: Response) => {
   try {
     await dbConnect();
     const { id } = req.params;
@@ -67,7 +67,7 @@ app.get('/notes/:id', async (req, res) => {
   }
 });
 
-app.put('/notes/:id', async (req, res) => {
+app.put('/notes/:id', async (req: Request, res: Response) => {
   try {
     await dbConnect();
     const { id } = req.params;
@@ -86,7 +86,7 @@ app.put('/notes/:id', async (req, res) => {
   }
 });
 
-app.delete('/notes/:id', async (req, res) => {
+app.delete('/notes/:id', async (req: Request, res: Response) => {
   try {
     await dbConnect();
     const { id } = req.params;
