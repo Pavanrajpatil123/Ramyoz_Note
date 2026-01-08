@@ -3,12 +3,12 @@ import dbConnect from '@/lib/mongodb';
 import Note from '@/models/Note';
 import { isValidObjectId } from 'mongoose';
 
-type Params = { params: { id: string } };
+type RouteParams = { params: Promise<{ id: string }> };
 
-export async function GET(_req: NextRequest, { params }: Params) {
+export async function GET(_req: NextRequest, { params }: RouteParams) {
   try {
     await dbConnect();
-    const { id } = params;
+    const { id } = await params;
     if (!isValidObjectId(id)) {
       return Response.json({ success: false, message: 'Invalid ID' }, { status: 400 });
     }
@@ -20,10 +20,10 @@ export async function GET(_req: NextRequest, { params }: Params) {
   }
 }
 
-export async function PUT(req: NextRequest, { params }: Params) {
+export async function PUT(req: NextRequest, { params }: RouteParams) {
   try {
     await dbConnect();
-    const { id } = params;
+    const { id } = await params;
     if (!isValidObjectId(id)) {
       return Response.json({ success: false, message: 'Invalid ID' }, { status: 400 });
     }
@@ -40,10 +40,10 @@ export async function PUT(req: NextRequest, { params }: Params) {
   }
 }
 
-export async function DELETE(_req: NextRequest, { params }: Params) {
+export async function DELETE(_req: NextRequest, { params }: RouteParams) {
   try {
     await dbConnect();
-    const { id } = params;
+    const { id } = await params;
     if (!isValidObjectId(id)) {
       return Response.json({ success: false, message: 'Invalid ID' }, { status: 400 });
     }
